@@ -1,4 +1,12 @@
-SET( MAIN_SOURCES
-  main.cpp)
+SET(MAIN_SOURCES
+  main.cpp
+  Atom.cpp
+  Matrix.cpp
+  Simulation.cpp
+  Vec.cpp
+  )
 
-ADD_EXECUTABLE(${TARGET_MAIN} ${MAIN_SOURCES})
+SET(MAIN_HEADERS
+    common.h)
+
+ADD_EXECUTABLE(${TARGET_MAIN} ${MAIN_SOURCES} ${MAIN_HEADERS})
