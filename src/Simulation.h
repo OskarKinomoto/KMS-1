@@ -18,10 +18,24 @@ public:
     void initPositions();
     void initEKin();
 
-    Vector sumEKin();
+    Vector sumP();
     void printP(std::ostream &stream);
     void printR(std::ostream &stream);
     void printRP(std::ostream &stream);
+
+    void setR(const Real &r);
+
+    void calcFPV();
+
+    void setL(const Real &L);
+
+    void setF(const Real &f);
+
+    void setEpsilon(const Real &epsilon);
+
+    void step(Real tau);
+
+    Real getT();
 
 private:
     Real m_nx;
@@ -30,6 +44,10 @@ private:
     int m_N;
 
     Real m_a;
+    Real m_r;
+    Real m_L;
+    Real m_f;
+    Real m_epsilon;
 
     Matrix m_base;
 
@@ -37,6 +55,9 @@ private:
 
     AtomVec m_current;
     AtomVec m_future;
+
+    Real m_P; /// Ciśnienie układu
+    Real m_V; /// Potencjał układu
 
 private:
     void futureToCurrent();

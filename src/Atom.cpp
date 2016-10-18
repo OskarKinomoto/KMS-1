@@ -19,7 +19,7 @@ Real TToEKin(Real T) {
 
 }
 
-Vector Atom::r() const
+Vector &Atom::r()
 {
     return m_r;
 }
@@ -29,7 +29,7 @@ void Atom::setR(const Vector &r)
     m_r = r;
 }
 
-Vector Atom::p() const
+Vector &Atom::p()
 {
     return m_p;
 }
@@ -64,4 +64,24 @@ void Atom::setEKin(Real EKinX, Real EKinY, Real EKinZ)
     m_p.setX(EKinToP(EKinX, m_m));
     m_p.setY(EKinToP(EKinY, m_m));
     m_p.setZ(EKinToP(EKinZ, m_m));
+}
+
+Vector &Atom::f()
+{
+    return m_f;
+}
+
+bool Atom::operator==(const Atom &a2)
+{
+    return this == &a2;
+}
+
+void Atom::clearF()
+{
+    m_f = Vector(0,0,0);
+}
+
+Real Atom::m() const
+{
+    return m_m;
 }

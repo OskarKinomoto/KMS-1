@@ -16,6 +16,7 @@ public:
 
     Vector operator*(Real s) const;
     Vector operator/(Real s) const;
+    Vector operator-(const Vector &v2) const;
 
     Vector &operator=(const Vector &v);
     Vector &operator()(Real x, Real y, Real z);

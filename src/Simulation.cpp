@@ -1,12 +1,19 @@
 #include "Simulation.h"
 
+#include <iostream>
+#include <cmath>
+
 namespace {
 
-Real TToEKin(Real T) {
-    return .5 * physicConstants::kB * T;
+Real pow(Real a, int n) {
+    Real ret = 1;
+    while(n--) {
+        ret *= a;
+    }
+    return ret;
 }
 
-}
+} /* namespace */
 
 Simulation::Simulation(int nx, int ny, int nz) : m_nx(nx), m_ny(ny), m_nz(nz)
 {
@@ -55,16 +62,16 @@ void Simulation::initPositions()
 void Simulation::initEKin()
 {
     setEKin();
-
+#if 0
     /* Normalizacja E_kin względem temperatury */
     auto eKinAbsSum = getAbsEKin();
 
     auto eKinPerAt = eKinAbsSum / m_N;
 
     normalizeEKin(TToEKin(m_T) / eKinPerAt);
-
+#endif
     /* Usunięcie przesuwania się układu */
-    auto eKinSum = sumEKin();
+    auto eKinSum = sumP();
     eKinSum /= -m_N;
     changeP(eKinSum);
 }
@@ -104,7 +111,7 @@ void Simulation::changeP(Vector p)
     }
 }
 
-Vector Simulation::sumEKin()
+Vector Simulation::sumP()
 {
     Vector ret(0,0,0);
     for (auto &at : m_current) {
@@ -132,4 +139,84 @@ void Simulation::printRP(std::ostream &stream)
     for (auto &at : m_current) {
         stream << at.r() << " " << at.p() << std::endl;
     }
+}
+
+void Simulation::setR(const Real &r)
+{
+    m_r = r;
+}
+
+void Simulation::calcFPV()
+{
+    m_P = 0;
+    m_V = 0;
+
+    for (auto &at : m_current) {
+        at.clearF();
+    }
+
+    for (int i = 0; i < m_N; ++i) {
+        auto &at = m_current.at(i);
+        auto r_s = at.r().abs();
+
+        if (r_s >= m_L && false) {
+            m_V  += .5 * m_f * (r_s - m_L);
+            at.f() += at.r() * (m_f * (m_L - r_s) / r_s);
+            m_P += 1 / (4 * M_PI * m_L * m_L) * at.f().abs();
+        }
+
+        for (int j = 0; j <= i - 1; ++j) {
+            auto &at2 = m_current.at(j);
+            auto r_ij_vec = at.r() - at2.r();
+            auto r_ij = (r_ij_vec).abs();
+            auto R_r = m_r / r_ij;
+            auto R_r_6 = pow(R_r, 6);
+            auto R_r_12 = pow(R_r_6, 2);
+
+            m_V += m_epsilon * (R_r_12 - 2 * R_r_6);
+
+            auto tmp = (12 * m_epsilon * ( R_r_12 - R_r_6 ) / (r_ij * r_ij));
+            auto F = r_ij_vec * tmp;
+            at.f() += F;
+            at2.f() -= F;
+        }
+    }
+}
+
+void Simulation::setL(const Real &L)
+{
+    m_L = L;
+}
+
+void Simulation::setF(const Real &f)
+{
+    m_f = f;
+}
+
+void Simulation::setEpsilon(const Real &epsilon)
+{
+    m_epsilon = epsilon;
+}
+
+void Simulation::step(Real tau)
+{
+    for (auto &at : m_current) {
+        /* 18a */
+        at.p() += at.f() * (.5 * tau);
+        /* 18b */
+        auto xx= at.p() * (tau / at.m());
+        at.r() += xx;
+        asm("nop");
+    }
+    calcFPV();
+
+    for (auto &at : m_current) {
+        /* 18c */
+        at.p() += at.f() * (.5 * tau);
+    }
+}
+
+Real Simulation::getT()
+{
+    return 2 * getAbsEKin() / (3 * m_N * physicConstants::kB);
 }

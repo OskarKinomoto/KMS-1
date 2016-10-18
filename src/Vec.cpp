@@ -49,6 +49,11 @@ Vector Vector::operator/(Real s) const
     return Vector(m_x/s, m_y/s, m_z/s);
 }
 
+Vector Vector::operator-(const Vector &v2) const
+{
+    return Vector(m_x - v2.m_x, m_y - v2.m_y, m_z - v2.m_z);
+}
+
 Vector &Vector::operator=(const Vector &v)
 {
     m_x = v.m_x;
