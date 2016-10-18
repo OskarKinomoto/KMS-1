@@ -141,6 +141,13 @@ void Simulation::printRP(std::ostream &stream)
     }
 }
 
+void Simulation::printXYZ(std::ostream &stream)
+{
+    for (auto &at : m_current) {
+        stream << "Ar " << at.r() << std::endl;
+    }
+}
+
 void Simulation::setR(const Real &r)
 {
     m_r = r;
@@ -159,7 +166,7 @@ void Simulation::calcFPV()
         auto &at = m_current.at(i);
         auto r_s = at.r().abs();
 
-        if (r_s >= m_L && false) {
+        if (r_s >= m_L) {
             m_V  += .5 * m_f * (r_s - m_L);
             at.f() += at.r() * (m_f * (m_L - r_s) / r_s);
             m_P += 1 / (4 * M_PI * m_L * m_L) * at.f().abs();
@@ -175,10 +182,11 @@ void Simulation::calcFPV()
 
             m_V += m_epsilon * (R_r_12 - 2 * R_r_6);
 
-            auto tmp = (12 * m_epsilon * ( R_r_12 - R_r_6 ) / (r_ij * r_ij));
+            auto tmp = (12 * m_epsilon * ( R_r_12 - R_r_6 )) / (r_ij * r_ij);
             auto F = r_ij_vec * tmp;
             at.f() += F;
             at2.f() -= F;
+            asm("nop");
         }
     }
 }

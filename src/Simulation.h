@@ -22,6 +22,7 @@ public:
     void printP(std::ostream &stream);
     void printR(std::ostream &stream);
     void printRP(std::ostream &stream);
+    void printXYZ(std::ostream &stream);
 
     void setR(const Real &r);
 

@@ -5,6 +5,6 @@ typedef double Real;
 
 namespace physicConstants {
 
-constexpr Real kB = 1.38064852e-23;
+constexpr Real kB = 8.31e-3;
 
 }

@@ -36,7 +36,7 @@ private:
     Vector m_r;
     Vector m_p;
     Vector m_f;
-    Real m_m = 1;
+    Real m_m = 40;
 };
 
 std::ostream &operator<<(std::ostream &s, const Atom& v);
