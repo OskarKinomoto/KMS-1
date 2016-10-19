@@ -2,12 +2,16 @@
 
 #include <ostream>
 
+// AVX
+#include <immintrin.h>
+
 #include "common.h"
 
 class Vector {
 public:
     Vector();
     Vector(Real x, Real y, Real z);
+    Vector(__m256d d);
 
     Vector &operator/=(Real s);
     Vector &operator*=(Real s);
@@ -19,7 +23,6 @@ public:
     Vector operator-(const Vector &v2) const;
 
     Vector &operator=(const Vector &v);
-    Vector &operator()(Real x, Real y, Real z);
 
     Real x() const;
     void setX(const Real &x);
@@ -35,9 +38,15 @@ public:
 
     static Vector one();
 private:
-    Real m_x;
-    Real m_y;
-    Real m_z;
+    union {
+        __m256d m_d;
+        struct {
+            Real m_x;
+            Real m_y;
+            Real m_z;
+            Real m_0;
+        };
+    };
 };
 
 std::ostream &operator<<(std::ostream &s, const Vector& v);

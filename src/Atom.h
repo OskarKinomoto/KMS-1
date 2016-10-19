@@ -5,10 +5,11 @@
 
 #include "common.h"
 #include "Vec.h"
+#include "allocator.h"
 
 class Atom;
 
-typedef std::vector<Atom> AtomVec;
+typedef std::vector<Atom, aligned_allocator<Atom, sizeof(__m256d)> > AtomVec;
 
 class Atom {
 public:

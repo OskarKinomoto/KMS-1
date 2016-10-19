@@ -7,6 +7,7 @@ SET(MAIN_SOURCES
   )
 
 SET(MAIN_HEADERS
-    common.h)
+    common.h
+    allocator.h)
 
 ADD_EXECUTABLE(${TARGET_MAIN} ${MAIN_SOURCES} ${MAIN_HEADERS})
