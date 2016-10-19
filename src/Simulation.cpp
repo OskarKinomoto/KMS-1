@@ -62,14 +62,7 @@ void Simulation::initPositions()
 void Simulation::initEKin()
 {
     setEKin();
-#if 0
-    /* Normalizacja E_kin względem temperatury */
-    auto eKinAbsSum = getAbsEKin();
 
-    auto eKinPerAt = eKinAbsSum / m_N;
-
-    normalizeEKin(TToEKin(m_T) / eKinPerAt);
-#endif
     /* Usunięcie przesuwania się układu */
     auto eKinSum = sumP();
     eKinSum /= -m_N;
@@ -83,8 +76,19 @@ void Simulation::futureToCurrent()
 
 void Simulation::setEKin()
 {
+    double t = 0;
     for (auto &at : m_current) {
-        at.setEKin(m_T);
+        t += at.setEKin(m_T);
+    }
+
+    if (t != 0) {
+        t /= (m_N * 3);
+        double b = .5 * physicConstants::kB * m_T;
+        double scale = sqrt(b / t);
+
+        for (auto &at : m_current) {
+            at.p() *= scale;
+        }
     }
 }
 
@@ -145,6 +149,13 @@ void Simulation::printXYZ(std::ostream &stream)
 {
     for (auto &at : m_current) {
         stream << "Ar " << at.r() << std::endl;
+    }
+}
+
+void Simulation::printXYZK(std::ostream &stream)
+{
+    for (auto &at : m_current) {
+        stream << "Ar " << at.r() << " " << at.EKin() << "\n";
     }
 }
 
@@ -227,4 +238,27 @@ void Simulation::step(Real tau)
 Real Simulation::getT()
 {
     return 2 * getAbsEKin() / (3 * m_N * physicConstants::kB);
+}
+
+Real Simulation::getV() const
+{
+    return m_V;
+}
+
+Real Simulation::getP() const
+{
+    return m_P;
+}
+
+Real Simulation::getH()
+{
+    Real H = 0;
+
+    for (auto &at : m_current) {
+        H += at.p().abs2();
+    }
+    H /= 2*(m_current.at(0).m());
+
+    H += getV();
+    return H;
 }

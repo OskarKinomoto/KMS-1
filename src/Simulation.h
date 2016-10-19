@@ -23,6 +23,7 @@ public:
     void printR(std::ostream &stream);
     void printRP(std::ostream &stream);
     void printXYZ(std::ostream &stream);
+    void printXYZK(std::ostream &stream);
 
     void setR(const Real &r);
 
@@ -38,14 +39,20 @@ public:
 
     Real getT();
 
+    Real getV() const;
+
+    Real getP() const;
+
+    Real getH();
+
 private:
     Real m_nx;
     Real m_ny;
     Real m_nz;
     int m_N;
 
-    Real m_a;
-    Real m_r;
+    Real m_a = .38;
+    Real m_r = .38;
     Real m_L;
     Real m_f;
     Real m_epsilon;

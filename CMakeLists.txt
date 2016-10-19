@@ -6,9 +6,9 @@ SET(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -ggdb")
 SET(CMAKE_CXX_FLAGS_RELEASE "-O2 -g")
 SET(CMAKE_CXX_FLAGS_CCOV "-O2 -g --coverage")
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -msse -msse2 -msse3 -march=native -mfpmath=sse")
 
-SET(CMAKE_BUILD_TYPE debug)
+SET(CMAKE_BUILD_TYPE release)
 
 # Set compiler warning flags
 # ADD_DEFINITIONS("-Werror") # Make all warnings into errors.

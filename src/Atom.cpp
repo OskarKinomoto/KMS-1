@@ -54,16 +54,17 @@ Real Atom::EKin() const
     return m_p.abs2() / ( 2 * m_m);
 }
 
-void Atom::setEKin(Real T)
+double Atom::setEKin(Real T)
 {
-    setEKin(TToEKin(T), TToEKin(T), TToEKin(T));
+    return setEKin(TToEKin(T), TToEKin(T), TToEKin(T));
 }
 
-void Atom::setEKin(Real EKinX, Real EKinY, Real EKinZ)
+double Atom::setEKin(Real EKinX, Real EKinY, Real EKinZ)
 {
     m_p.setX(EKinToP(EKinX, m_m));
     m_p.setY(EKinToP(EKinY, m_m));
     m_p.setZ(EKinToP(EKinZ, m_m));
+    return EKinX + EKinY + EKinZ;
 }
 
 Vector &Atom::f()

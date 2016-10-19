@@ -21,8 +21,8 @@ public:
     void addP(const Vector &v);
 
     Real EKin() const;
-    void setEKin(Real T);
-    void setEKin(Real EKinX, Real EKinY, Real EKinZ);
+    double setEKin(Real T);
+    double setEKin(Real EKinX, Real EKinY, Real EKinZ);
 
     Vector &f();
 
