@@ -197,7 +197,6 @@ void Simulation::calcFPV()
             auto F = r_ij_vec * tmp;
             at.f() += F;
             at2.f() -= F;
-            asm("nop");
         }
     }
 }
