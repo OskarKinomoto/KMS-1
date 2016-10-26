@@ -82,7 +82,7 @@ public:
         return static_cast<value_type *>(ptr);
     }
 
-    void deallocate(value_type * const p, const std::size_t n) const
+    void deallocate(value_type * const p, const std::size_t /*n*/) const
     {
         _mm_free(p);
     }

@@ -1,11 +1,12 @@
 #pragma once
 
-#include <ostream>
-
+#include <iostream>
+#include <vector>
 // AVX
 #include <immintrin.h>
 
 #include "common.h"
+#include "allocator.h"
 
 class Vector {
 public:
@@ -25,13 +26,15 @@ public:
     Vector &operator=(const Vector &v);
 
     Real x() const;
-    void setX(const Real &x);
+    void setX(Real x);
 
     Real y() const;
-    void setY(const Real &y);
+    void setY(Real y);
 
     Real z() const;
-    void setZ(const Real &z);
+    void setZ(Real z);
+
+    void set(Real x, Real y, Real z);
 
     Real abs() const;
     Real abs2() const;
@@ -48,5 +51,6 @@ private:
         };
     };
 };
-
+typedef std::vector<Vector, aligned_allocator<Vector, sizeof(__m256d)> > VectorVec;
 std::ostream &operator<<(std::ostream &s, const Vector& v);
+std::istream &operator>>(std::istream &s, Vector& v);

@@ -63,7 +63,7 @@ Real Vector::x() const
     return m_x;
 }
 
-void Vector::setX(const Real &x)
+void Vector::setX(Real x)
 {
     m_x = x;
 }
@@ -73,7 +73,7 @@ Real Vector::y() const
     return m_y;
 }
 
-void Vector::setY(const Real &y)
+void Vector::setY(Real y)
 {
     m_y = y;
 }
@@ -83,9 +83,16 @@ Real Vector::z() const
     return m_z;
 }
 
-void Vector::setZ(const Real &z)
+void Vector::setZ(Real z)
 {
     m_z = z;
+}
+
+void Vector::set(Real x, Real y, Real z)
+{
+    m_z = z;
+    m_y = y;
+    m_x = x;
 }
 
 Real Vector::abs() const
@@ -107,5 +114,13 @@ Vector Vector::one()
 std::ostream &operator<<(std::ostream &s, const Vector &v)
 {
     s << v.x() << " " << v.y() << " " << v.z();
+    return s;
+}
+
+std::istream &operator>>(std::istream &s, Vector &v)
+{
+    Real x,y,z;
+    s >> x >> y >> z;
+    v.set(x, y ,z);
     return s;
 }

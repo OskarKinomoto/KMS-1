@@ -8,7 +8,7 @@ SET(CMAKE_CXX_FLAGS_CCOV "-O2 -g --coverage")
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -msse -msse2 -msse3 -march=native -mfpmath=sse -mavx")
 
-SET(CMAKE_BUILD_TYPE release)
+SET(CMAKE_BUILD_TYPE debug)
 
 # Set compiler warning flags
 # ADD_DEFINITIONS("-Werror") # Make all warnings into errors.
@@ -16,5 +16,12 @@ ADD_DEFINITIONS("-Wall") # Generate all warnings
 ADD_DEFINITIONS("-Wextra") # Generate even more extra warnings
 
 SET(TARGET_MAIN "main")
+SET(TARGET_GL "gl")
+
+configure_file("parm.conf" "bin/parm.conf" COPYONLY)
+
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
+
 
 ADD_SUBDIRECTORY(src)
+

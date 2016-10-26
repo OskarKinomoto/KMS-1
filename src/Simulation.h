@@ -29,6 +29,8 @@ public:
 
     void calcFPV();
 
+    void calcFPV(int i_start, int i_stop);
+
     void setL(const Real &L);
 
     void setF(const Real &f);

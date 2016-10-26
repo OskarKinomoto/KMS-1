@@ -13,7 +13,8 @@ void randInit() {
               std::chrono::system_clock::now().time_since_epoch()).count());
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+
     feenableexcept(FE_INVALID | FE_OVERFLOW);
     //randInit();
 
@@ -31,7 +32,13 @@ int main() {
     Vector b2(a / 2, a * sqrt(3) / 6, a * sqrt(2./3));
 
     /* load data */
-    std::ifstream conf("parm.conf");
+    std::string parmPath = "parm.conf";
+    std::string out_post_fix = "";
+    if (argc == 3) {
+        parmPath = argv[1];
+    }
+
+    std::ifstream conf(parmPath);
     if (conf.is_open()) {
         std::string drop;
         conf >> drop >> n;
@@ -93,7 +100,7 @@ int main() {
 
         if (!(s % S_xyz)) {
             file << n*n*n << std::endl;
-            file << "#t = " << s*tau << "ps" << std::endl;
+            file << "# " << s*tau << " " << sim.getT() << std::endl;
             sim.printXYZK(file);
             file << std::flush;
         }
