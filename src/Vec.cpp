@@ -2,9 +2,9 @@
 
 #include <cmath>
 
-Vector::Vector() : m_x(0), m_y(0), m_z(0) {}
+Vector::Vector() : m_x(0), m_y(0), m_z(0), m_0(0) {}
 
-Vector::Vector(Real x, Real y, Real z) : m_x(x), m_y(y), m_z(z) {}
+Vector::Vector(Real x, Real y, Real z) : m_x(x), m_y(y), m_z(z), m_0(0) {}
 
 Vector::Vector(__m256d d) : m_d(d) {}
 

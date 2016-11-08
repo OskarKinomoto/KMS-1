@@ -4,6 +4,18 @@
 #include <vector>
 #include <Vec.h>
 
+#include <sstream>
+#include <iomanip>
+
+
+template <typename T>
+std::string to_string_with_precision(const T a_value, const int n = 6)
+{
+    std::ostringstream out;
+    out << std::setprecision(n) << std::fixed << a_value;
+    return out.str();
+}
+
 class Frame {
 public:
     Frame();
@@ -17,7 +29,15 @@ public:
         stream.getline(buf, sizeof(buf));
 
         std::string d;
-        stream >> d >> d >> f.T;
+        stream >> d >> f.time >> f.T;
+
+        f.T_str = "T: ";
+        f.T_str += to_string_with_precision(f.T, 2);
+        f.T_str += "K";
+
+        f.t_str = "t: ";
+        f.t_str += to_string_with_precision(f.time, 2);
+        f.t_str += "ps";
 
         stream.getline(buf, sizeof(buf));
 
@@ -41,8 +61,12 @@ public:
        return s;
     }
 
+    std::string T_str;
+    std::string t_str;
+
     VectorVec &at();
     Real T;
+    Real time;
 
 private:
     VectorVec m_at;

@@ -159,15 +159,8 @@ void Simulation::printXYZK(std::ostream &stream)
     }
 }
 
-void Simulation::setR(const Real &r)
-{
-    m_r = r;
-}
-
 void Simulation::calcFPV()
 {
-    calcFPV(0, m_N);
-    return;
     m_P = 0;
     m_V = 0;
 
@@ -180,7 +173,8 @@ void Simulation::calcFPV()
         auto r_s = at.r().abs();
 
         if (r_s >= m_L) {
-            m_V  += .5 * m_f * (r_s - m_L);
+            Real s = (r_s - m_L);
+            m_V  += .5 * m_f * s*s;
             at.f() += at.r() * (m_f * (m_L - r_s) / r_s);
             m_P += 1 / (4 * M_PI * m_L * m_L) * at.f().abs();
         }
@@ -199,45 +193,6 @@ void Simulation::calcFPV()
             auto F = r_ij_vec * tmp;
             at.f() += F;
             at2.f() -= F;
-        }
-    }
-}
-
-void Simulation::calcFPV(int i_start, int i_stop)
-{
-    m_P = 0;
-    m_V = 0;
-
-    for (auto &at : m_current) {
-        at.clearF();
-    }
-
-    for (int i = i_start; i < i_stop; ++i) {
-        auto &at = m_current.at(i);
-        auto r_s = at.r().abs();
-
-        if (r_s >= m_L) {
-            m_V  += .5 * m_f * (r_s - m_L);
-            at.f() += at.r() * (m_f * (m_L - r_s) / r_s);
-            m_P += 1 / (4 * M_PI * m_L * m_L) * at.f().abs();
-        }
-
-        for (int j = 0; j < m_N; ++j) {
-            if (j == i)
-                continue;
-            auto &at2 = m_current.at(j);
-            auto r_ij_vec = at.r() - at2.r();
-            auto r_ij = (r_ij_vec).abs();
-            auto R_r = m_r / r_ij;
-            auto R_r_6 = pow(R_r, 6);
-            auto R_r_12 = pow(R_r_6, 2);
-
-            m_V += m_epsilon * (R_r_12 - 2 * R_r_6);
-
-            auto tmp = (12 * m_epsilon * ( R_r_12 - R_r_6 )) / (r_ij * r_ij);
-            auto F = r_ij_vec * tmp;
-            at.f() += F;
-            //at2.f() -= F;
         }
     }
 }
@@ -301,4 +256,15 @@ Real Simulation::getH()
 
     H += getV();
     return H;
+}
+
+Real Simulation::getEkin()
+{
+    Real H = 0;
+
+    for (auto &at : m_current) {
+        H += at.p().abs2();
+    }
+    H /= 2*(m_current.at(0).m());
+    return getAbsEKin();
 }

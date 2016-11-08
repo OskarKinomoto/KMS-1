@@ -47,6 +47,8 @@ public:
 
     Real getH();
 
+    Real getEkin();
+
 private:
     Real m_nx;
     Real m_ny;
@@ -54,7 +56,7 @@ private:
     int m_N;
 
     Real m_a = .38;
-    Real m_r = .38;
+    const Real m_r = .38;
     Real m_L;
     Real m_f;
     Real m_epsilon;
